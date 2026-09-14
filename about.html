@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="About ZK Furniture — company introduction, showroom information and contact details.">
+    <meta name="keywords" content="ZK Furniture, furniture showroom, furniture manufacturer, furniture company">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | ZK Furniture</title>
+    <script src="data/js/images.js"></script>
+    <script src="data/js/text.js"></script>
+    <script src="js/lang.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="about-page-body">
+<header class="header">
+    <div class="logo"><a href="index.html" aria-label="Home"><img id="siteLogo" decoding="async" alt=""></a></div>
+    <nav>
+        <a id="navHome" href="index.html"></a>
+        <a id="navProducts" href="products.html"></a>
+        <a id="navAbout" href="about.html"></a>
+    </nav>
+    <div class="language-selector"><select id="languageSelect" aria-label="Language"><option value="en">English</option><option value="fr">Français</option><option value="es">Español</option></select></div>
+</header>
+
+<main class="about-page">
+    <section class="about-hero"><div class="about-hero-inner"><h1 id="aboutPageTitle"></h1></div></section>
+
+    <section class="about-company about-section">
+        <div class="about-section-inner narrow">
+            <p class="eyebrow" id="aboutIntroTitle"></p>
+            <h2 id="aboutContactTitle"></h2>
+            <p id="aboutIntro" class="about-lead"></p>
+        </div>
+    </section>
+
+    <section id="aboutGallerySection" class="about-gallery about-section" hidden>
+        <div class="about-section-inner">
+            <div class="about-section-heading">
+                <h2 id="aboutGalleryTitle"></h2>
+                <p id="aboutGalleryHint"></p>
+            </div>
+            <div class="about-carousel">
+                <div id="aboutSlides" class="about-carousel-track"></div>
+                <button id="aboutPrev" class="about-carousel-btn about-carousel-prev" type="button" aria-label="Previous image">‹</button>
+                <button id="aboutNext" class="about-carousel-btn about-carousel-next" type="button" aria-label="Next image">›</button>
+                <div id="aboutDots" class="about-carousel-dots"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-contact about-section">
+        <div class="about-section-inner">
+            <div class="about-info-grid">
+                <div class="about-info-card"><h3 id="aboutAddressLabel"></h3><p id="aboutAddress"></p></div>
+                <div class="about-info-card"><h3 id="aboutPhoneLabel"></h3><p><a id="aboutPhone" href=""></a></p></div>
+                <div class="about-info-card"><h3 id="aboutEmailLabel"></h3><p><a id="aboutEmail" href=""></a></p></div>
+                <div class="about-info-card"><h3 id="aboutHoursLabel"></h3><p id="aboutHours"></p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-map about-section">
+        <div class="about-section-inner narrow">
+            <div class="about-section-heading"><h2 id="aboutMapTitle"></h2></div>
+            <div class="about-map-actions">
+                <a id="googleMapsLink" class="about-action" target="_blank" rel="noopener noreferrer"><span class="about-action-icon">G</span><span id="googleMapsLabel"></span></a>
+                <a id="appleMapsLink" class="about-action" target="_blank" rel="noopener noreferrer"><span class="about-action-icon"></span><span id="appleMapsLabel"></span></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-social about-section">
+        <div class="about-section-inner narrow">
+            <div class="about-section-heading"><h2 id="aboutSocialTitle"></h2></div>
+            <div class="about-social-links">
+                <a id="instagramLink" class="social-link" target="_blank" rel="noopener noreferrer" hidden>
+                    <img src="https://cdn.simpleicons.org/instagram" alt="Instagram"><span id="instagramLabel"></span>
+                </a>
+                <a id="facebookLink" class="social-link" target="_blank" rel="noopener noreferrer" hidden>
+                    <img src="https://cdn.simpleicons.org/facebook" alt="Facebook"><span id="facebookLabel"></span>
+                </a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer"><div class="footer-inner"><span id="footerCopyright">© 2026 Luxury Furniture</span><a id="footerWhatsApp" target="_blank" rel="noopener noreferrer">WhatsApp</a></div></footer>
+
+<script>
+const t = siteText.about || {};
+const setText = (id, value, html = false) => { const el = document.getElementById(id); if (!el) return; html ? el.innerHTML = value : el.textContent = value; };
+const setLink = (id, href, label) => { const el=document.getElementById(id); if(!el)return; if(href){el.href=href;el.hidden=false;} else {el.hidden=true;} if(label) { const labelEl=el.querySelector('span:last-child') || el; labelEl.textContent=label; } };
+
+const logo = document.getElementById('siteLogo');
+if (logo && siteImages.logo?.src) { logo.src = siteImages.logo.src; logo.alt = siteImages.logo.alt || 'Luxury Furniture'; }
+setText('navHome', siteText.nav?.home || 'Home');
+setText('navProducts', siteText.nav?.products || 'Products');
+setText('navAbout', siteText.nav?.about || 'About');
+
+setText('aboutPageTitle', t.pageTitle || 'About Us');
+setText('aboutIntroTitle', t.introTitle || 'Our Company');
+setText('aboutContactTitle', t.contactTitle || '');
+setText('aboutIntro', t.intro || '');
+setText('aboutGalleryTitle', t.galleryTitle || 'Our Showroom');
+setText('aboutGalleryHint', t.galleryHint || '');
+setText('aboutAddressLabel', t.addressLabel || 'Address');
+setText('aboutAddress', t.address || '');
+setText('aboutPhoneLabel', t.phoneLabel || 'Phone');
+setText('aboutEmailLabel', t.emailLabel || 'Email');
+setText('aboutHoursLabel', t.hoursLabel || 'Business Hours');
+setText('aboutHours', t.hours || '');
+setText('aboutMapTitle', t.mapTitle || 'Find Us');
+setText('googleMapsLabel', t.googleMapsLabel || 'Google Maps');
+setText('appleMapsLabel', t.appleMapsLabel || 'Apple Maps');
+setText('aboutSocialTitle', t.socialTitle || 'Follow Us');
+setText('instagramLabel', t.instagramLabel || 'Instagram');
+setText('facebookLabel', t.facebookLabel || 'Facebook');
+
+const phone = String(t.phone || '').trim();
+const phoneLink = document.getElementById('aboutPhone');
+if (phoneLink) { phoneLink.textContent = phone; phoneLink.href = phone ? `tel:${phone.replace(/[^+\d]/g,'')}` : '#'; }
+const email = String(t.email || '').trim();
+const emailLink = document.getElementById('aboutEmail');
+if (emailLink) { emailLink.textContent = email; emailLink.href = email ? `mailto:${email}` : '#'; }
+
+const googleLink = document.getElementById('googleMapsLink');
+const appleLink = document.getElementById('appleMapsLink');
+if (t.googleMapsUrl) googleLink.href = t.googleMapsUrl; else googleLink.hidden = true;
+if (t.appleMapsUrl) appleLink.href = t.appleMapsUrl; else appleLink.hidden = true;
+setLink('instagramLink', t.instagramUrl, t.instagramLabel || 'Instagram');
+setLink('facebookLink', t.facebookUrl, t.facebookLabel || 'Facebook');
+
+const gallerySection = document.getElementById('aboutGallerySection');
+const slidesHost = document.getElementById('aboutSlides');
+const dotsHost = document.getElementById('aboutDots');
+const aboutImages = Array.isArray(siteImages.aboutImages) ? siteImages.aboutImages.filter(item => item?.src) : [];
+let aboutIndex = 0;
+let aboutTimer = null;
+const showAboutSlide = i => {
+    if (!aboutImages.length) return;
+    aboutIndex = (i + aboutImages.length) % aboutImages.length;
+    [...slidesHost.children].forEach((slide,n)=>slide.classList.toggle('active',n===aboutIndex));
+    [...dotsHost.children].forEach((dot,n)=>dot.classList.toggle('active',n===aboutIndex));
+};
+const startAboutAutoPlay = () => { clearInterval(aboutTimer); if(aboutImages.length>1) aboutTimer=setInterval(()=>showAboutSlide(aboutIndex+1),4000); };
+if (aboutImages.length) {
+    gallerySection.hidden = false;
+    aboutImages.forEach((item,i)=>{
+        const slide=document.createElement('div'); slide.className=`about-carousel-slide${i===0?' active':''}`;
+        slide.innerHTML=`<img src="${String(item.src).replace(/"/g,'&quot;')}" alt="${String(item.alt||'About Us').replace(/"/g,'&quot;')}" loading="lazy" decoding="async">`;
+        slidesHost.appendChild(slide);
+        const dot=document.createElement('button'); dot.className=`about-carousel-dot${i===0?' active':''}`; dot.type='button'; dot.setAttribute('aria-label',`Image ${i+1}`); dot.addEventListener('click',()=>showAboutSlide(i)); dotsHost.appendChild(dot);
+    });
+    document.getElementById('aboutPrev')?.addEventListener('click',()=>showAboutSlide(aboutIndex-1));
+    document.getElementById('aboutNext')?.addEventListener('click',()=>showAboutSlide(aboutIndex+1));
+    startAboutAutoPlay();
+}
+
+setText('footerCopyright', siteText.footer?.copyright || '© 2026 Luxury Furniture');
+const footerWhatsApp = document.getElementById('footerWhatsApp');
+setText('footerWhatsApp', siteText.footer?.whatsapp || 'WhatsApp');
+if (footerWhatsApp && siteText.whatsapp?.number) footerWhatsApp.href = `https://wa.me/${siteText.whatsapp.number}`;
+</script>
+</body>
+</html>

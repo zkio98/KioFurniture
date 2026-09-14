@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="ZK Furniture is a professional furniture manufacturer supplying modern home furniture, office furniture, sofas, tables and customized furniture solutions worldwide.">
+    <meta name="keywords" content="furniture manufacturer, wholesale furniture, sofa supplier, office furniture, home furniture">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Furniture</title>
+    <script src="data/js/images.js"></script>
+    <script src="data/js/text.js"></script>
+    <script src="js/lang.js"></script>
+    <script src="data/js/products.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="header">
+    <div class="logo"><a href="index.html" aria-label="Home"><img id="siteLogo" decoding="async" alt=""></a></div>
+    <nav>
+        <a id="navHome" href="index.html"></a>
+        <a id="navProducts" href="products.html"></a>
+        <a id="navAbout" href="about.html"></a>
+    </nav>
+    <div class="language-selector"><select id="languageSelect" aria-label="Language"><option value="en">English</option><option value="fr">Français</option><option value="es">Español</option></select></div>
+</header>
+
+<section class="hero">
+    <div id="heroSlides"></div>
+    <button class="hero-prev" type="button" aria-label="Previous slide">‹</button>
+    <button class="hero-next" type="button" aria-label="Next slide">›</button>
+    <div id="heroDots" class="hero-dots"></div>
+</section>
+
+<section class="collections">
+    <h2 id="collectionsTitle"></h2>
+    <p id="collectionsText"></p>
+    <div id="collectionGrid" class="collection-grid"></div>
+</section>
+
+<section id="featuredProducts" class="featured-products" hidden>
+    <h2 id="featuredProductsTitle"></h2>
+    <div id="featuredProductsList" class="featured-products-grid"></div>
+</section>
+
+<section class="about"><h2 id="aboutTitle"></h2><p id="aboutText"></p></section>
+
+<a id="homeWhatsApp" class="whatsapp-float" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+
+<footer class="site-footer"><div class="footer-inner"><span id="footerCopyright">© 2026 Luxury Furniture</span><a id="footerWhatsApp" target="_blank" rel="noopener noreferrer">WhatsApp</a></div></footer>
+
+<script>
+const escapeHtml = text => String(text ?? "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+
+const getLocalized = value => {
+    if (value && typeof value === "object") return value[currentLanguage] || value.en || "";
+    return value || "";
+};
+
+const setText = (id, value, html = false) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    html ? el.innerHTML = value : el.textContent = value;
+};
+
+const setImage = (el, config) => {
+    if (!el || !config?.src) return;
+    el.src = config.src;
+    el.alt = config.alt || "";
+};
+
+setImage(document.getElementById("siteLogo"), siteImages.logo);
+setText("navHome", siteText.nav?.home || "Home");
+setText("navProducts", siteText.nav?.products || "Products");
+setText("navAbout", siteText.nav?.about || "About");
+setText("collectionsTitle", siteText.home?.collectionsTitle || "Furniture Collections");
+setText("collectionsText", siteText.home?.collectionsText || "");
+setText("aboutTitle", siteText.home?.aboutTitle || "");
+setText("aboutText", siteText.home?.aboutText || "");
+setText("featuredProductsTitle", siteText.home?.featuredProductsTitle || "Featured Products");
+
+const heroSlidesEl = document.getElementById("heroSlides");
+const heroDotsEl = document.getElementById("heroDots");
+const banners = Array.isArray(siteImages.banners) ? siteImages.banners : [];
+
+banners.forEach((banner, i) => {
+    const slide = document.createElement("div");
+    slide.className = `hero-slide${i === 0 ? " active" : ""}`;
+    slide.innerHTML = `
+        <img src="${escapeHtml(banner.src)}" alt="${escapeHtml(banner.alt || getLocalized(banner.translations))}" ${i === 0 ? 'fetchpriority="high"' : 'loading="eager"'} decoding="async">
+        <div class="hero-content">
+            <h1>${getLocalized(siteText.home?.[`${banner.key}Title`] || "")}</h1>
+            <p>${getLocalized(siteText.home?.[`${banner.key}Text`] || "")}</p>
+            <a href="products.html">${getLocalized(siteText.home?.[`${banner.key}Button`] || siteText.home?.hero1Button || "Explore Products")}</a>
+        </div>`;
+    heroSlidesEl.appendChild(slide);
+
+    const dot = document.createElement("span");
+    dot.className = `dot${i === 0 ? " active" : ""}`;
+    dot.setAttribute("role", "button");
+    dot.setAttribute("tabindex", "0");
+    dot.setAttribute("aria-label", `Slide ${i + 1}`);
+    dot.addEventListener("click", () => showSlide(i));
+    dot.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showSlide(i); } });
+    heroDotsEl.appendChild(dot);
+});
+
+const slides = [...document.querySelectorAll(".hero-slide")];
+const dots = [...document.querySelectorAll(".dot")];
+const hero = document.querySelector(".hero");
+const nextButton = document.querySelector(".hero-next");
+const prevButton = document.querySelector(".hero-prev");
+let index = 0;
+let autoPlay = null;
+const showSlide = i => {
+    if (!slides.length) return;
+    index = (i + slides.length) % slides.length;
+    slides.forEach((s, n) => s.classList.toggle("active", n === index));
+    dots.forEach((d, n) => d.classList.toggle("active", n === index));
+};
+const nextSlide = () => showSlide(index + 1);
+const prevSlide = () => showSlide(index - 1);
+const startAutoPlay = () => { clearInterval(autoPlay); if (slides.length > 1) autoPlay = setInterval(nextSlide, 3000); };
+const stopAutoPlay = () => clearInterval(autoPlay);
+nextButton?.addEventListener("click", nextSlide);
+prevButton?.addEventListener("click", prevSlide);
+hero?.addEventListener("mouseenter", stopAutoPlay);
+hero?.addEventListener("mouseleave", startAutoPlay);
+startAutoPlay();
+
+const collectionGrid = document.getElementById("collectionGrid");
+const collections = Array.isArray(siteImages.collections) ? siteImages.collections : [];
+collections.forEach(item => {
+    const card = document.createElement("a");
+    card.href = `products.html?category=${encodeURIComponent(item.categoryId)}`;
+    card.innerHTML = `<img src="${escapeHtml(item.image || siteImages.warning)}" alt="${escapeHtml(item.alt || getLocalized(item.translations))}" loading="lazy" decoding="async"><h3>${escapeHtml(getLocalized(item.translations))}</h3>`;
+    collectionGrid.appendChild(card);
+});
+
+const featuredSection = document.getElementById("featuredProducts");
+const featuredList = document.getElementById("featuredProductsList");
+const featuredProducts = Array.isArray(products) ? products.filter(p => p.featured) : [];
+if (featuredProducts.length) {
+    featuredSection.hidden = false;
+    featuredProducts.forEach(item => {
+        const localized = getLocalizedProduct(item);
+        const card = document.createElement("a");
+        card.className = "home-featured-card";
+        card.href = `detail.html?model=${encodeURIComponent(item.model)}`;
+        const badge = item.new ? `<span class="new-product-badge">NEW</span>` : "";
+        card.innerHTML = `${badge}
+            <div class="home-featured-image-wrap"><img src="${escapeHtml(item.images?.[0] || siteImages.warning)}" alt="${escapeHtml(localized.name)}" loading="lazy" decoding="async"></div>
+            <h3>${escapeHtml(localized.name)}</h3>
+            <div class="home-featured-model">Model: ${escapeHtml(item.model)}</div>
+            <p>${escapeHtml(localized.description)}</p>`;
+        featuredList.appendChild(card);
+    });
+}
+
+const footerCopyright = siteText.footer?.copyright || "© 2026 Luxury Furniture";
+const footerWhatsApp = siteText.footer?.whatsapp || "WhatsApp";
+setText("footerCopyright", footerCopyright);
+setText("footerWhatsApp", footerWhatsApp);
+const waNumber = siteText.whatsapp?.number || "";
+const waUrl = waNumber ? `https://wa.me/${waNumber}` : "";
+const homeWhatsAppEl = document.getElementById("homeWhatsApp");
+const footerWhatsAppEl = document.getElementById("footerWhatsApp");
+if (homeWhatsAppEl) homeWhatsAppEl.href = waUrl;
+if (footerWhatsAppEl) footerWhatsAppEl.href = waUrl;
+</script>
+</body>
+</html>
